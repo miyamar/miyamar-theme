@@ -1,6 +1,6 @@
 <div align="left">
   
-# Hevana Theme
+# Miyamar Theme
 
 A modern VS Code theme with polished dark and light variants.
 
@@ -52,7 +52,7 @@ A modern VS Code theme with polished dark and light variants.
 
 1. Open the Command Palette
 2. Run "Preferences: Color Theme"
-3. Select "Hevana" Dark or Light
+3. Select "Miyamar" Dark or Light
 
 ----------------------------------------------
 ## License

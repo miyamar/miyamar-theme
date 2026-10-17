@@ -1,6 +1,6 @@
 {
 	"$schema": "vscode://schemas/color-theme",
-	"name": "Hevana Light",
+	"name": "Miyamar Light",
 	"type": "light",
 	"colors": {
 		"focusBorder": "#B8B8BD",

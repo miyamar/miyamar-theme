@@ -1,6 +1,6 @@
 {
     "$schema": "vscode://schemas/color-theme",
-    "name": "Hevana Burgundy Dark",
+    "name": "Miyamar Burgundy Dark",
     "type": "dark",
     "colors": {
         "focusBorder": "#C2607F",
