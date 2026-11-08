@@ -188,17 +188,17 @@
             "font_weight": null
           },
           "boolean": {
-            "color": "#BA90D0",
+            "color": "#E2868A",
             "font_style": null,
             "font_weight": null
           },
           "comment": {
-            "color": "#636366",
+            "color": "#6F7C78",
             "font_style": "italic",
             "font_weight": null
           },
           "comment.doc": {
-            "color": "#636366",
+            "color": "#6F7C78",
             "font_style": "italic",
             "font_weight": null
           },
@@ -248,7 +248,7 @@
             "font_weight": null
           },
           "keyword": {
-            "color": "#FF7AB2",
+            "color": "#E2868A",
             "font_style": null,
             "font_weight": null
           },
@@ -278,12 +278,12 @@
             "font_weight": null
           },
           "number": {
-            "color": "#BA90D0",
+            "color": "#BFD1BA",
             "font_style": null,
             "font_weight": null
           },
           "operator": {
-            "color": "#89DDFF",
+            "color": "#9AA3AD",
             "font_style": null,
             "font_weight": null
           },
@@ -308,7 +308,7 @@
             "font_weight": null
           },
           "punctuation.bracket": {
-            "color": "#8E8E93",
+            "color": "#E5E5EA",
             "font_style": null,
             "font_weight": null
           },
@@ -323,12 +323,12 @@
             "font_weight": null
           },
           "punctuation.special": {
-            "color": "#89DDFF",
+            "color": "#9AA3AD",
             "font_style": null,
             "font_weight": null
           },
           "string": {
-            "color": "#A8E6CF",
+            "color": "#D6C98A",
             "font_style": null,
             "font_weight": null
           },
@@ -595,17 +595,17 @@
             "font_weight": null
           },
           "boolean": {
-            "color": "#8944AB",
+            "color": "#D04452",
             "font_style": null,
             "font_weight": null
           },
           "comment": {
-            "color": "#8E8E93",
+            "color": "#71857C",
             "font_style": "italic",
             "font_weight": null
           },
           "comment.doc": {
-            "color": "#8E8E93",
+            "color": "#71857C",
             "font_style": "italic",
             "font_weight": null
           },
@@ -655,7 +655,7 @@
             "font_weight": null
           },
           "keyword": {
-            "color": "#D12F7C",
+            "color": "#D04452",
             "font_style": null,
             "font_weight": null
           },
@@ -685,12 +685,12 @@
             "font_weight": null
           },
           "number": {
-            "color": "#8944AB",
+            "color": "#609456",
             "font_style": null,
             "font_weight": null
           },
           "operator": {
-            "color": "#007A99",
+            "color": "#687783",
             "font_style": null,
             "font_weight": null
           },
@@ -715,7 +715,7 @@
             "font_weight": null
           },
           "punctuation.bracket": {
-            "color": "#6E6E73",
+            "color": "#1C1C1E",
             "font_style": null,
             "font_weight": null
           },
@@ -730,12 +730,12 @@
             "font_weight": null
           },
           "punctuation.special": {
-            "color": "#007A99",
+            "color": "#687783",
             "font_style": null,
             "font_weight": null
           },
           "string": {
-            "color": "#1F8A65",
+            "color": "#A17F16",
             "font_style": null,
             "font_weight": null
           },
@@ -1002,17 +1002,17 @@
             "font_weight": null
           },
           "boolean": {
-            "color": "#8B5CC4",
+            "color": "#D3136F",
             "font_style": null,
             "font_weight": null
           },
           "comment": {
-            "color": "#A08B94",
+            "color": "#96788A",
             "font_style": "italic",
             "font_weight": null
           },
           "comment.doc": {
-            "color": "#A08B94",
+            "color": "#96788A",
             "font_style": "italic",
             "font_weight": null
           },
@@ -1062,7 +1062,7 @@
             "font_weight": null
           },
           "keyword": {
-            "color": "#C0397B",
+            "color": "#D3136F",
             "font_style": null,
             "font_weight": null
           },
@@ -1092,12 +1092,12 @@
             "font_weight": null
           },
           "number": {
-            "color": "#8B5CC4",
+            "color": "#8038DB",
             "font_style": null,
             "font_weight": null
           },
           "operator": {
-            "color": "#1F8FA3",
+            "color": "#0098B0",
             "font_style": null,
             "font_weight": null
           },
@@ -1122,7 +1122,7 @@
             "font_weight": null
           },
           "punctuation.bracket": {
-            "color": "#8F7580",
+            "color": "#3D2B33",
             "font_style": null,
             "font_weight": null
           },
@@ -1137,12 +1137,12 @@
             "font_weight": null
           },
           "punctuation.special": {
-            "color": "#1F8FA3",
+            "color": "#0098B0",
             "font_style": null,
             "font_weight": null
           },
           "string": {
-            "color": "#3E8E6D",
+            "color": "#0F9962",
             "font_style": null,
             "font_weight": null
           },
@@ -1409,7 +1409,7 @@
             "font_weight": null
           },
           "boolean": {
-            "color": "#C3A1F0",
+            "color": "#F2839F",
             "font_style": null,
             "font_weight": null
           },
@@ -1529,7 +1529,7 @@
             "font_weight": null
           },
           "punctuation.bracket": {
-            "color": "#B08E99",
+            "color": "#F2DCE1",
             "font_style": null,
             "font_weight": null
           },
@@ -1816,7 +1816,7 @@
             "font_weight": null
           },
           "boolean": {
-            "color": "#7B3FD1",
+            "color": "#8A0F3A",
             "font_style": null,
             "font_weight": null
           },
@@ -1936,7 +1936,7 @@
             "font_weight": null
           },
           "punctuation.bracket": {
-            "color": "#7D5A64",
+            "color": "#33161E",
             "font_style": null,
             "font_weight": null
           },

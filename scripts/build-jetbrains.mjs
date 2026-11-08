@@ -3,9 +3,18 @@
 // them in plugin.xml.
 import fs from "node:fs";
 import path from "node:path";
-import { AUTHOR, ROOT, flatten, loadThemes, withAlpha, writeFile } from "./lib/vscode-theme.mjs";
+import { AUTHOR, ROOT, flatten, loadThemes, mix, withAlpha, writeFile } from "./lib/vscode-theme.mjs";
 
 const RES = "jetbrains/src/main/resources";
+
+/**
+ * Toolbar/action icon color. Light themes pull VS Code's grey icon color most of the
+ * way toward the text color, since JetBrains' thin New UI icons read too faint in grey.
+ */
+function iconColor(t) {
+  const icon = t.color("icon.foreground", "foreground");
+  return t.dark ? icon : mix(t.color("foreground"), icon, 0.7);
+}
 
 // ---------- UI theme ----------
 
@@ -17,6 +26,12 @@ function uiTheme(t) {
   // VS Code colors over the surface they sit on.
   const sp = (...keys) => t.solid(panel, ...keys);
   const se = (...keys) => t.solid(editor, ...keys);
+
+  const toolbar = c("titleBar.activeBackground");
+  const toolbarFg = c("titleBar.activeForeground", "foreground");
+  const toolbarHover = flatten(withAlpha(toolbarFg, 0.08), toolbar);
+  const toolbarPressed = flatten(withAlpha(toolbarFg, 0.14), toolbar);
+  const icons = iconColor(t);
 
   const border = c("panel.border", "sideBar.border");
   const selection = sp("list.activeSelectionBackground");
@@ -137,9 +152,29 @@ function uiTheme(t) {
     Tree: list,
     Table: { ...list, gridColor: border, stripeColor: panel },
     MainToolbar: {
-      background: c("titleBar.activeBackground"),
+      background: toolbar,
       inactiveBackground: c("titleBar.inactiveBackground", "titleBar.activeBackground"),
-      foreground: c("titleBar.activeForeground"),
+      foreground: toolbarFg,
+      separatorColor: c("titleBar.border", "panel.border"),
+      borderColor: c("titleBar.border", "panel.border"),
+      "Icon.background": toolbar,
+      "Icon.hoverBackground": toolbarHover,
+      "Icon.pressedBackground": toolbarPressed,
+      "Dropdown.foreground": toolbarFg,
+      "Dropdown.background": toolbar,
+      "Dropdown.hoverBackground": toolbarHover,
+      "Dropdown.pressedBackground": toolbarPressed,
+      "Dropdown.transparentHoverBackground": withAlpha(toolbarFg, 0.08),
+    },
+    // The run/debug/build controls and their "more" menu live here. JetBrains'
+    // defaults assume a dark header and paint them near-white.
+    RunWidget: {
+      foreground: toolbarFg,
+      iconColor: icons,
+      runIconColor: c("testing.iconPassed", "terminal.ansiGreen"),
+      runningIconColor: toolbarFg,
+      hoverBackground: toolbarHover,
+      pressedBackground: toolbarPressed,
     },
     TitlePane: {
       background: c("titleBar.activeBackground"),
@@ -226,11 +261,23 @@ function uiTheme(t) {
       "Header.inactiveBackground": c("sideBarSectionHeader.background", "sideBar.background"),
       "HeaderTab.selectedInactiveBackground": selectionInactive,
       "HeaderTab.hoverBackground": hover,
-      "Button.selectedBackground": selection,
+      // The left/right tool window stripes sit beside the project view, so they take
+      // the file explorer's color rather than VS Code's (often much stronger)
+      // activity bar color.
+      "Stripe.background": panel,
+      "Stripe.borderColor": border,
+      "Stripe.separatorColor": border,
+      "Button.foreground": icons,
+      "Button.selectedForeground": c("foreground"),
+      "Button.selectedBackground": selectionInactive,
       "Button.hoverBackground": hover,
-      "Stripe.background": c("activityBar.background"),
     },
   };
+}
+
+/** New UI icon recoloring. Gray.Stroke is the grey (#6C707E) of light-theme icons. */
+function iconPalette(t) {
+  return t.dark ? undefined : { ColorPalette: { "Gray.Stroke": iconColor(t) } };
 }
 
 function prune(obj) {
@@ -247,6 +294,116 @@ const hex = (h) => (h ? h.replace("#", "").slice(0, 6) : "");
 const FONT = (r) => (r ? (r.bold ? 1 : 0) | (r.italic ? 2 : 0) : 0);
 // EFFECT_TYPE values used by IntelliJ scheme files.
 const EFFECT = { boxed: 0, underline: 1, wave: 2, strikeout: 3 };
+
+// Language-specific keys that the bundled Darcula/Default schemes (and their plugin
+// add-ons) give hard-coded colors. Left alone, those would win over our DEFAULT_*
+// colors; baseAttributes makes them follow the language default instead, the same
+// way JetBrains' own New UI schemes do.
+const INHERIT = {
+  // Java / Kotlin / Groovy / Scala
+  INSTANCE_FIELD_ATTRIBUTES: "DEFAULT_INSTANCE_FIELD",
+  STATIC_FIELD_ATTRIBUTES: "DEFAULT_STATIC_FIELD",
+  STATIC_FINAL_FIELD_ATTRIBUTES: "DEFAULT_CONSTANT",
+  STATIC_METHOD_ATTRIBUTES: "DEFAULT_STATIC_METHOD",
+  ANNOTATION_NAME_ATTRIBUTES: "DEFAULT_METADATA",
+  ANNOTATION_ATTRIBUTE_NAME_ATTRIBUTES: "DEFAULT_PARAMETER",
+  IMPLICIT_ANONYMOUS_CLASS_PARAMETER_ATTRIBUTES: "DEFAULT_PARAMETER",
+  KOTLIN_LABEL: "DEFAULT_LABEL",
+  KOTLIN_MUTABLE_VARIABLE: "DEFAULT_LOCAL_VARIABLE",
+  KOTLIN_NAMED_ARGUMENT: "DEFAULT_IDENTIFIER",
+  KOTLIN_SMART_CONSTANT: "DEFAULT_CONSTANT",
+  KOTLIN_TYPE_PARAMETER: "TYPE_PARAMETER_NAME_ATTRIBUTES",
+  IntelliJComposableCallTextAttributes: "DEFAULT_FUNCTION_CALL",
+  GROOVY_KEYWORD: "DEFAULT_KEYWORD",
+  "Groovy method declaration": "DEFAULT_FUNCTION_DECLARATION",
+  "Instance property reference ID": "DEFAULT_INSTANCE_FIELD",
+  "Static property reference ID": "DEFAULT_STATIC_FIELD",
+  "Static method access": "DEFAULT_STATIC_METHOD",
+  Class: "DEFAULT_CLASS_REFERENCE",
+  "Scala Type Alias": "DEFAULT_CLASS_NAME",
+  "Scala Type parameter": "TYPE_PARAMETER_NAME_ATTRIBUTES",
+  // JavaScript / TypeScript / Angular
+  "JS.GLOBAL_FUNCTION": "DEFAULT_FUNCTION_DECLARATION",
+  "JS.GLOBAL_VARIABLE": "DEFAULT_GLOBAL_VARIABLE",
+  "JS.INSTANCE_MEMBER_FUNCTION": "DEFAULT_INSTANCE_METHOD",
+  "JS.LOCAL_VARIABLE": "DEFAULT_LOCAL_VARIABLE",
+  "COFFEESCRIPT.GLOBAL_VARIABLE": "DEFAULT_GLOBAL_VARIABLE",
+  "NG.SIGNAL": "DEFAULT_FUNCTION_CALL",
+  // Python
+  "PY.BUILTIN_NAME": "DEFAULT_PREDEFINED_SYMBOL",
+  "PY.KEYWORD_ARGUMENT": "DEFAULT_IDENTIFIER",
+  "PY.PREDEFINED_DEFINITION": "DEFAULT_FUNCTION_DECLARATION",
+  "PY.PREDEFINED_USAGE": "DEFAULT_FUNCTION_CALL",
+  "PY.SELF_PARAMETER": "DEFAULT_PARAMETER",
+  "PY.STRING.B": "DEFAULT_STRING",
+  // Go
+  GO_BUILTIN_CONSTANT: "DEFAULT_CONSTANT",
+  GO_BUILTIN_FUNCTION_CALL: "DEFAULT_FUNCTION_CALL",
+  GO_BUILTIN_TYPE_REFERENCE: "DEFAULT_CLASS_REFERENCE",
+  GO_BUILTIN_VARIABLE: "DEFAULT_GLOBAL_VARIABLE",
+  GO_COMMENT_REFERENCE: "DEFAULT_DOC_COMMENT_TAG_VALUE",
+  GO_EXPORTED_FUNCTION: "DEFAULT_FUNCTION_DECLARATION",
+  GO_EXPORTED_FUNCTION_CALL: "DEFAULT_FUNCTION_CALL",
+  GO_LOCAL_CONSTANT: "DEFAULT_CONSTANT",
+  GO_LOCAL_FUNCTION: "DEFAULT_FUNCTION_DECLARATION",
+  GO_LOCAL_FUNCTION_CALL: "DEFAULT_FUNCTION_CALL",
+  GO_METHOD_RECEIVER: "DEFAULT_PARAMETER",
+  GO_PACKAGE: "DEFAULT_IDENTIFIER",
+  GO_PACKAGE_EXPORTED_CONSTANT: "DEFAULT_CONSTANT",
+  GO_PACKAGE_LOCAL_CONSTANT: "DEFAULT_CONSTANT",
+  GO_SHADOWING_VARIABLE: "DEFAULT_LOCAL_VARIABLE",
+  GO_TYPE_REFERENCE: "DEFAULT_CLASS_REFERENCE",
+  // Markup
+  HTML_ATTRIBUTE_NAME: "DEFAULT_ATTRIBUTE",
+  HTML_ATTRIBUTE_VALUE: "DEFAULT_STRING",
+  HTML_TAG_NAME: "DEFAULT_TAG",
+  HTML_CUSTOM_TAG_NAME: "DEFAULT_TAG",
+  HTML_ENTITY_REFERENCE: "DEFAULT_ENTITY",
+  XML_ATTRIBUTE_NAME: "DEFAULT_ATTRIBUTE",
+  XML_TAG_NAME: "DEFAULT_TAG",
+  XML_CUSTOM_TAG_NAME: "DEFAULT_TAG",
+  XML_ENTITY_REFERENCE: "DEFAULT_ENTITY",
+  XML_PROLOGUE: "DEFAULT_KEYWORD",
+  JSP_DIRECTIVE_NAME: "DEFAULT_KEYWORD",
+  HAML_TAG: "DEFAULT_TAG",
+  HAML_CLASS: "DEFAULT_ATTRIBUTE",
+  HAML_ID: "DEFAULT_ATTRIBUTE",
+  HAML_COMMENT: "DEFAULT_LINE_COMMENT",
+  // Stylesheets
+  "CSS.COLOR": "DEFAULT_NUMBER",
+  "CSS.IMPORTANT": "DEFAULT_KEYWORD",
+  "CSS.URL": "DEFAULT_STRING",
+  LESS_VARIABLE: "DEFAULT_LOCAL_VARIABLE",
+  SASS_VARIABLE: "DEFAULT_LOCAL_VARIABLE",
+  SASS_ATTRIBUTE: "DEFAULT_INSTANCE_FIELD",
+  SASS_COMMENT: "DEFAULT_BLOCK_COMMENT",
+  SASS_CONSTANT: "DEFAULT_CONSTANT",
+  SASS_DIRECTIVE: "DEFAULT_KEYWORD",
+  SASS_RULE: "DEFAULT_KEYWORD",
+  SASS_MIXIN: "DEFAULT_FUNCTION_CALL",
+  // Data / config
+  YAML_ANCHOR: "DEFAULT_CONSTANT",
+  "PROPERTIES.KEY": "DEFAULT_INSTANCE_FIELD",
+  "PROPERTIES.KEY_VALUE_SEPARATOR": "DEFAULT_OPERATION_SIGN",
+  "PROPERTIES.VALID_STRING_ESCAPE": "DEFAULT_VALID_STRING_ESCAPE",
+  "PROPERTIES.INVALID_STRING_ESCAPE": "DEFAULT_INVALID_STRING_ESCAPE",
+  // Regular expressions
+  "REGEXP.BRACES": "JS.REGEXP",
+  "REGEXP.BRACKETS": "JS.REGEXP",
+  "REGEXP.PARENTHS": "JS.REGEXP",
+  "REGEXP.CHAR_CLASS": "JS.REGEXP",
+  "REGEXP.META": "JS.REGEXP",
+  "REGEXP.ESC_CHARACTER": "DEFAULT_VALID_STRING_ESCAPE",
+  "REGEXP.QUOTE_CHARACTER": "DEFAULT_VALID_STRING_ESCAPE",
+  "REGEXP.REDUNDANT_ESCAPE": "DEFAULT_VALID_STRING_ESCAPE",
+  // Mermaid
+  MERMAID_KEYWORD: "DEFAULT_KEYWORD",
+  MERMAID_CONSTANT: "DEFAULT_CONSTANT",
+  MERMAID_IDENTIFIER: "DEFAULT_IDENTIFIER",
+  MERMAID_EDGE: "DEFAULT_OPERATION_SIGN",
+  MERMAID_DIAGRAM_NAME: "DEFAULT_KEYWORD",
+  MERMAID_TITLE: "DEFAULT_KEYWORD",
+};
 
 function scheme(t) {
   const { color: c, syntax: s } = t;
@@ -293,7 +450,6 @@ function scheme(t) {
   const bg = (color, extra = {}) => color && { BACKGROUND: color, ...extra };
   const effect = (color, type, extra = {}) =>
     color && { EFFECT_COLOR: color, EFFECT_TYPE: EFFECT[type], ...extra };
-  const italic = (role) => role && { ...role, italic: true };
 
   const err = c("editorError.foreground");
   const warn = c("editorWarning.foreground");
@@ -316,16 +472,16 @@ function scheme(t) {
     DEFAULT_DOC_COMMENT_TAG_VALUE: fg(s.parameter),
     DEFAULT_DOC_MARKUP: fg(s.comment),
     DEFAULT_OPERATION_SIGN: fg(s.operator),
-    DEFAULT_BRACES: fg(s.punctuation),
-    DEFAULT_BRACKETS: fg(s.punctuation),
-    DEFAULT_PARENTHS: fg(s.punctuation),
+    DEFAULT_BRACES: fg(s.bracket),
+    DEFAULT_BRACKETS: fg(s.bracket),
+    DEFAULT_PARENTHS: fg(s.bracket),
     DEFAULT_COMMA: fg(s.punctuation),
     DEFAULT_SEMICOLON: fg(s.punctuation),
     DEFAULT_DOT: fg(s.punctuation),
     DEFAULT_FUNCTION_DECLARATION: fg(s.function),
     DEFAULT_FUNCTION_CALL: fg(s.function),
     DEFAULT_INSTANCE_METHOD: fg(s.method),
-    DEFAULT_STATIC_METHOD: fg(italic(s.method)),
+    DEFAULT_STATIC_METHOD: fg(s.method),
     DEFAULT_CLASS_NAME: fg(s.class),
     DEFAULT_CLASS_REFERENCE: fg(s.class),
     DEFAULT_INTERFACE_NAME: fg(s.interface),
@@ -338,14 +494,27 @@ function scheme(t) {
     DEFAULT_GLOBAL_VARIABLE: fg(s.variable),
     DEFAULT_IDENTIFIER: fg(s.variable),
     DEFAULT_INSTANCE_FIELD: fg(s.property),
-    DEFAULT_STATIC_FIELD: fg(italic(s.property)),
+    DEFAULT_STATIC_FIELD: fg(s.property),
     DEFAULT_METADATA: fg(s.decorator),
     DEFAULT_LABEL: fg(s.typeParameter),
     DEFAULT_TAG: fg(s.tag),
     DEFAULT_ATTRIBUTE: fg(s.attribute),
     DEFAULT_ENTITY: fg(s.stringEscape),
     "JS.REGEXP": fg(s.regexp),
+    "JSON.PROPERTY_KEY": fg(s.jsonKey),
+    YAML_SCALAR_KEY: fg(s.tag),
+    HTML_TAG: fg(s.punctuation),
+    XML_TAG: fg(s.punctuation),
+    XML_TAG_DATA: fg(s.bracket),
 
+    MARKDOWN_HEADER: fg(s.heading),
+    MARKDOWN_HEADER_BOLD: fg(s.heading),
+    MARKDOWN_CODE_BLOCK: fg(s.raw),
+    MARKDOWN_CODE_FENCE: fg(s.raw),
+    MARKDOWN_AUTO_LINK: fg(link),
+    MARKDOWN_IMAGE: fg(link),
+    MARKDOWN_REFERENCE_LINK: fg(link),
+    MARKDOWN_BLOCK_QUOTE_MARKER: fg(s.punctuation),
     MARKDOWN_HEADER_LEVEL_1: fg(s.heading),
     MARKDOWN_HEADER_LEVEL_2: fg(s.heading),
     MARKDOWN_HEADER_LEVEL_3: fg(s.heading),
@@ -379,6 +548,14 @@ function scheme(t) {
     FOLDED_TEXT_ATTRIBUTES: { FOREGROUND: c("descriptionForeground"), BACKGROUND: se("editor.foldBackground", "editor.wordHighlightBackground") },
     INLAY_DEFAULT: { FOREGROUND: c("editorInlayHint.foreground", "editorCodeLens.foreground"), BACKGROUND: se("editorInlayHint.background", "editor.lineHighlightBackground") },
     INLINE_PARAMETER_HINT: { FOREGROUND: c("editorInlayHint.foreground", "editorCodeLens.foreground"), BACKGROUND: se("editorInlayHint.background", "editor.lineHighlightBackground") },
+    INLINE_PARAMETER_HINT_CURRENT: { FOREGROUND: c("editor.foreground"), BACKGROUND: se("editor.wordHighlightBackground") },
+    INLINE_PARAMETER_HINT_HIGHLIGHTED: { FOREGROUND: c("editor.foreground"), BACKGROUND: se("editor.wordHighlightBackground") },
+    INLAY_TEXT_WITHOUT_BACKGROUND: { FOREGROUND: c("editorInlayHint.foreground", "editorCodeLens.foreground") },
+    BREADCRUMBS_DEFAULT: { FOREGROUND: c("breadcrumb.foreground") },
+    BREADCRUMBS_HOVERED: { FOREGROUND: c("breadcrumb.focusForeground") },
+    BREADCRUMBS_CURRENT: { FOREGROUND: c("breadcrumb.activeSelectionForeground", "breadcrumb.focusForeground") },
+    BREADCRUMBS_INACTIVE: { FOREGROUND: c("disabledForeground") },
+    MATCHED_TAG_NAME: bg(se("editorBracketMatch.background")),
     LIVE_TEMPLATE_ATTRIBUTES: effect(c("focusBorder"), "boxed"),
 
     DIFF_INSERTED: bg(se("diffEditor.insertedLineBackground"), { ERROR_STRIPE_COLOR: c("editorGutter.addedBackground") }),
@@ -411,6 +588,37 @@ function scheme(t) {
   attributes.CONSOLE_GRAY_OUTPUT = { FOREGROUND: c("terminal.ansiWhite") };
   attributes.CONSOLE_DARKGRAY_OUTPUT = { FOREGROUND: c("terminal.ansiBrightBlack") };
   attributes.CONSOLE_WHITE_OUTPUT = { FOREGROUND: c("terminal.ansiBrightWhite") };
+  // The new block terminal uses its own keys.
+  for (const name of [...Object.keys(ansi), "WHITE"]) {
+    const cap = name[0] + name.slice(1).toLowerCase();
+    attributes[`BLOCK_TERMINAL_${name}`] = { FOREGROUND: c(`terminal.ansi${cap}`) };
+    attributes[`BLOCK_TERMINAL_${name}_BRIGHT`] = { FOREGROUND: c(`terminal.ansiBright${cap}`) };
+  }
+  // Logcat (Android Studio).
+  attributes.LOG_VERBOSE_OUTPUT = { FOREGROUND: c("descriptionForeground") };
+  attributes.LOG_DEBUG_OUTPUT = { FOREGROUND: c("terminal.ansiCyan") };
+  attributes.LOG_INFO_OUTPUT = { FOREGROUND: c("terminal.ansiGreen") };
+  attributes.LOG_WARNING_OUTPUT = { FOREGROUND: c("terminal.ansiYellow") };
+  attributes.LOG_ERROR_OUTPUT = { FOREGROUND: c("terminal.ansiRed") };
+  attributes.LOG_EXPIRED_ENTRY = { FOREGROUND: c("disabledForeground") };
+  // Semantic highlighting / rainbow palette, from VS Code's bracket pair colors.
+  for (let i = 0; i < 5; i++) {
+    const color = c(`editorBracketHighlight.foreground${i + 1}`);
+    if (color) attributes[`RAINBOW_COLOR${i}`] = { FOREGROUND: color };
+  }
+  // Custom file types (Settings > Editor > File Types).
+  Object.assign(attributes, {
+    CUSTOM_KEYWORD1_ATTRIBUTES: fg(s.keyword),
+    CUSTOM_KEYWORD2_ATTRIBUTES: fg(s.type),
+    CUSTOM_KEYWORD3_ATTRIBUTES: fg(s.function),
+    CUSTOM_KEYWORD4_ATTRIBUTES: fg(s.constant),
+    CUSTOM_LINE_COMMENT_ATTRIBUTES: fg(s.comment),
+    CUSTOM_MULTI_LINE_COMMENT_ATTRIBUTES: fg(s.comment),
+    CUSTOM_NUMBER_ATTRIBUTES: fg(s.number),
+    CUSTOM_STRING_ATTRIBUTES: fg(s.string),
+    CUSTOM_VALID_STRING_ESCAPE_ATTRIBUTES: fg(s.stringEscape),
+    CUSTOM_INVALID_STRING_ESCAPE_ATTRIBUTES: fg(s.invalid),
+  });
 
   const lines = [
     `<scheme name="${t.label}" version="142" parent_scheme="${t.dark ? "Darcula" : "Default"}">`,
@@ -433,6 +641,10 @@ function scheme(t) {
     }
     lines.push("      </value>", "    </option>");
   }
+  for (const [name, base] of Object.entries(INHERIT)) {
+    if (name in attributes) continue;
+    lines.push(`    <option name="${name}" baseAttributes="${base}" />`);
+  }
   lines.push("  </attributes>", "</scheme>");
   return lines.join("\n");
 }
@@ -448,6 +660,7 @@ for (const t of themes) {
     author: AUTHOR,
     editorScheme: `/themes/${t.id}.xml`,
     ui: prune(uiTheme(t)),
+    icons: iconPalette(t),
   };
   writeFile(`${RES}/themes/${t.id}.theme.json`, JSON.stringify(theme, null, 2));
   writeFile(`${RES}/themes/${t.id}.xml`, scheme(t));

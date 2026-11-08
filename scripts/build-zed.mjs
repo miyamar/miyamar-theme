@@ -43,7 +43,7 @@ function syntax(s, fallbackLink) {
     primary: s.variable,
     property: s.property,
     punctuation: s.punctuation,
-    "punctuation.bracket": s.punctuation,
+    "punctuation.bracket": s.bracket,
     "punctuation.delimiter": s.punctuation,
     "punctuation.list_marker": s.punctuation,
     "punctuation.special": s.operator,
