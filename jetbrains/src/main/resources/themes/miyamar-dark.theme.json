@@ -127,7 +127,25 @@
     "MainToolbar": {
       "background": "#070707",
       "inactiveBackground": "#050505",
-      "foreground": "#E5E5EA"
+      "foreground": "#E5E5EA",
+      "separatorColor": "#222224",
+      "borderColor": "#222224",
+      "Icon.background": "#070707",
+      "Icon.hoverBackground": "#181819",
+      "Icon.pressedBackground": "#262627",
+      "Dropdown.foreground": "#E5E5EA",
+      "Dropdown.background": "#070707",
+      "Dropdown.hoverBackground": "#181819",
+      "Dropdown.pressedBackground": "#262627",
+      "Dropdown.transparentHoverBackground": "#E5E5EA14"
+    },
+    "RunWidget": {
+      "foreground": "#E5E5EA",
+      "iconColor": "#8E8E93",
+      "runIconColor": "#30D158",
+      "runningIconColor": "#E5E5EA",
+      "hoverBackground": "#181819",
+      "pressedBackground": "#262627"
     },
     "TitlePane": {
       "background": "#070707",
@@ -260,9 +278,13 @@
       "Header.inactiveBackground": "#0A0A0A",
       "HeaderTab.selectedInactiveBackground": "#1A1A1C",
       "HeaderTab.hoverBackground": "#040404",
-      "Button.selectedBackground": "#252527",
-      "Button.hoverBackground": "#040404",
-      "Stripe.background": "#070707"
+      "Stripe.background": "#0A0A0A",
+      "Stripe.borderColor": "#222224",
+      "Stripe.separatorColor": "#222224",
+      "Button.foreground": "#8E8E93",
+      "Button.selectedForeground": "#E5E5EA",
+      "Button.selectedBackground": "#1A1A1C",
+      "Button.hoverBackground": "#040404"
     }
   }
 }

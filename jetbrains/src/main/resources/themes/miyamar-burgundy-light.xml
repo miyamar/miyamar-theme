@@ -117,17 +117,17 @@
     </option>
     <option name="DEFAULT_BRACES">
       <value>
-        <option name="FOREGROUND" value="7D5A64" />
+        <option name="FOREGROUND" value="33161E" />
       </value>
     </option>
     <option name="DEFAULT_BRACKETS">
       <value>
-        <option name="FOREGROUND" value="7D5A64" />
+        <option name="FOREGROUND" value="33161E" />
       </value>
     </option>
     <option name="DEFAULT_PARENTHS">
       <value>
-        <option name="FOREGROUND" value="7D5A64" />
+        <option name="FOREGROUND" value="33161E" />
       </value>
     </option>
     <option name="DEFAULT_COMMA">
@@ -163,7 +163,6 @@
     <option name="DEFAULT_STATIC_METHOD">
       <value>
         <option name="FOREGROUND" value="1570D6" />
-        <option name="FONT_TYPE" value="2" />
       </value>
     </option>
     <option name="DEFAULT_CLASS_NAME">
@@ -229,7 +228,6 @@
     <option name="DEFAULT_STATIC_FIELD">
       <value>
         <option name="FOREGROUND" value="0B9089" />
-        <option name="FONT_TYPE" value="2" />
       </value>
     </option>
     <option name="DEFAULT_METADATA">
@@ -260,6 +258,73 @@
     <option name="JS.REGEXP">
       <value>
         <option name="FOREGROUND" value="C75A10" />
+      </value>
+    </option>
+    <option name="JSON.PROPERTY_KEY">
+      <value>
+        <option name="FOREGROUND" value="B86E00" />
+      </value>
+    </option>
+    <option name="YAML_SCALAR_KEY">
+      <value>
+        <option name="FOREGROUND" value="B8203F" />
+      </value>
+    </option>
+    <option name="HTML_TAG">
+      <value>
+        <option name="FOREGROUND" value="7D5A64" />
+      </value>
+    </option>
+    <option name="XML_TAG">
+      <value>
+        <option name="FOREGROUND" value="7D5A64" />
+      </value>
+    </option>
+    <option name="XML_TAG_DATA">
+      <value>
+        <option name="FOREGROUND" value="33161E" />
+      </value>
+    </option>
+    <option name="MARKDOWN_HEADER">
+      <value>
+        <option name="FOREGROUND" value="26101A" />
+        <option name="FONT_TYPE" value="1" />
+      </value>
+    </option>
+    <option name="MARKDOWN_HEADER_BOLD">
+      <value>
+        <option name="FOREGROUND" value="26101A" />
+        <option name="FONT_TYPE" value="1" />
+      </value>
+    </option>
+    <option name="MARKDOWN_CODE_BLOCK">
+      <value>
+        <option name="FOREGROUND" value="1F9466" />
+      </value>
+    </option>
+    <option name="MARKDOWN_CODE_FENCE">
+      <value>
+        <option name="FOREGROUND" value="1F9466" />
+      </value>
+    </option>
+    <option name="MARKDOWN_AUTO_LINK">
+      <value>
+        <option name="FOREGROUND" value="7A1232" />
+      </value>
+    </option>
+    <option name="MARKDOWN_IMAGE">
+      <value>
+        <option name="FOREGROUND" value="7A1232" />
+      </value>
+    </option>
+    <option name="MARKDOWN_REFERENCE_LINK">
+      <value>
+        <option name="FOREGROUND" value="7A1232" />
+      </value>
+    </option>
+    <option name="MARKDOWN_BLOCK_QUOTE_MARKER">
+      <value>
+        <option name="FOREGROUND" value="7D5A64" />
       </value>
     </option>
     <option name="MARKDOWN_HEADER_LEVEL_1">
@@ -448,6 +513,48 @@
         <option name="BACKGROUND" value="DDC2C7" />
       </value>
     </option>
+    <option name="INLINE_PARAMETER_HINT_CURRENT">
+      <value>
+        <option name="FOREGROUND" value="33161E" />
+        <option name="BACKGROUND" value="DDC2C7" />
+      </value>
+    </option>
+    <option name="INLINE_PARAMETER_HINT_HIGHLIGHTED">
+      <value>
+        <option name="FOREGROUND" value="33161E" />
+        <option name="BACKGROUND" value="DDC2C7" />
+      </value>
+    </option>
+    <option name="INLAY_TEXT_WITHOUT_BACKGROUND">
+      <value>
+        <option name="FOREGROUND" value="7D5A64" />
+      </value>
+    </option>
+    <option name="BREADCRUMBS_DEFAULT">
+      <value>
+        <option name="FOREGROUND" value="94727C" />
+      </value>
+    </option>
+    <option name="BREADCRUMBS_HOVERED">
+      <value>
+        <option name="FOREGROUND" value="33161E" />
+      </value>
+    </option>
+    <option name="BREADCRUMBS_CURRENT">
+      <value>
+        <option name="FOREGROUND" value="26101A" />
+      </value>
+    </option>
+    <option name="BREADCRUMBS_INACTIVE">
+      <value>
+        <option name="FOREGROUND" value="A58A92" />
+      </value>
+    </option>
+    <option name="MATCHED_TAG_NAME">
+      <value>
+        <option name="BACKGROUND" value="C89EA7" />
+      </value>
+    </option>
     <option name="LIVE_TEMPLATE_ATTRIBUTES">
       <value>
         <option name="EFFECT_COLOR" value="7F1F3D" />
@@ -593,5 +700,286 @@
         <option name="FOREGROUND" value="4F2A35" />
       </value>
     </option>
+    <option name="BLOCK_TERMINAL_BLACK">
+      <value>
+        <option name="FOREGROUND" value="33161E" />
+      </value>
+    </option>
+    <option name="BLOCK_TERMINAL_BLACK_BRIGHT">
+      <value>
+        <option name="FOREGROUND" value="6E4A54" />
+      </value>
+    </option>
+    <option name="BLOCK_TERMINAL_RED">
+      <value>
+        <option name="FOREGROUND" value="D62F4B" />
+      </value>
+    </option>
+    <option name="BLOCK_TERMINAL_RED_BRIGHT">
+      <value>
+        <option name="FOREGROUND" value="E5566C" />
+      </value>
+    </option>
+    <option name="BLOCK_TERMINAL_GREEN">
+      <value>
+        <option name="FOREGROUND" value="2E8B57" />
+      </value>
+    </option>
+    <option name="BLOCK_TERMINAL_GREEN_BRIGHT">
+      <value>
+        <option name="FOREGROUND" value="3FA56C" />
+      </value>
+    </option>
+    <option name="BLOCK_TERMINAL_YELLOW">
+      <value>
+        <option name="FOREGROUND" value="B58100" />
+      </value>
+    </option>
+    <option name="BLOCK_TERMINAL_YELLOW_BRIGHT">
+      <value>
+        <option name="FOREGROUND" value="C98A00" />
+      </value>
+    </option>
+    <option name="BLOCK_TERMINAL_BLUE">
+      <value>
+        <option name="FOREGROUND" value="3A6FD8" />
+      </value>
+    </option>
+    <option name="BLOCK_TERMINAL_BLUE_BRIGHT">
+      <value>
+        <option name="FOREGROUND" value="5A8AE6" />
+      </value>
+    </option>
+    <option name="BLOCK_TERMINAL_MAGENTA">
+      <value>
+        <option name="FOREGROUND" value="9A2A5A" />
+      </value>
+    </option>
+    <option name="BLOCK_TERMINAL_MAGENTA_BRIGHT">
+      <value>
+        <option name="FOREGROUND" value="B84A72" />
+      </value>
+    </option>
+    <option name="BLOCK_TERMINAL_CYAN">
+      <value>
+        <option name="FOREGROUND" value="1F8FA3" />
+      </value>
+    </option>
+    <option name="BLOCK_TERMINAL_CYAN_BRIGHT">
+      <value>
+        <option name="FOREGROUND" value="38A6BA" />
+      </value>
+    </option>
+    <option name="BLOCK_TERMINAL_WHITE">
+      <value>
+        <option name="FOREGROUND" value="94727C" />
+      </value>
+    </option>
+    <option name="BLOCK_TERMINAL_WHITE_BRIGHT">
+      <value>
+        <option name="FOREGROUND" value="4F2A35" />
+      </value>
+    </option>
+    <option name="LOG_VERBOSE_OUTPUT">
+      <value>
+        <option name="FOREGROUND" value="6E4A54" />
+      </value>
+    </option>
+    <option name="LOG_DEBUG_OUTPUT">
+      <value>
+        <option name="FOREGROUND" value="1F8FA3" />
+      </value>
+    </option>
+    <option name="LOG_INFO_OUTPUT">
+      <value>
+        <option name="FOREGROUND" value="2E8B57" />
+      </value>
+    </option>
+    <option name="LOG_WARNING_OUTPUT">
+      <value>
+        <option name="FOREGROUND" value="B58100" />
+      </value>
+    </option>
+    <option name="LOG_ERROR_OUTPUT">
+      <value>
+        <option name="FOREGROUND" value="D62F4B" />
+      </value>
+    </option>
+    <option name="LOG_EXPIRED_ENTRY">
+      <value>
+        <option name="FOREGROUND" value="A58A92" />
+      </value>
+    </option>
+    <option name="RAINBOW_COLOR0">
+      <value>
+        <option name="FOREGROUND" value="7A1232" />
+      </value>
+    </option>
+    <option name="RAINBOW_COLOR1">
+      <value>
+        <option name="FOREGROUND" value="3148D6" />
+      </value>
+    </option>
+    <option name="RAINBOW_COLOR2">
+      <value>
+        <option name="FOREGROUND" value="B86E00" />
+      </value>
+    </option>
+    <option name="RAINBOW_COLOR3">
+      <value>
+        <option name="FOREGROUND" value="0B9089" />
+      </value>
+    </option>
+    <option name="RAINBOW_COLOR4">
+      <value>
+        <option name="FOREGROUND" value="7B3FD1" />
+      </value>
+    </option>
+    <option name="CUSTOM_KEYWORD1_ATTRIBUTES">
+      <value>
+        <option name="FOREGROUND" value="8A0F3A" />
+      </value>
+    </option>
+    <option name="CUSTOM_KEYWORD2_ATTRIBUTES">
+      <value>
+        <option name="FOREGROUND" value="B86E00" />
+      </value>
+    </option>
+    <option name="CUSTOM_KEYWORD3_ATTRIBUTES">
+      <value>
+        <option name="FOREGROUND" value="3148D6" />
+      </value>
+    </option>
+    <option name="CUSTOM_KEYWORD4_ATTRIBUTES">
+      <value>
+        <option name="FOREGROUND" value="1574AD" />
+      </value>
+    </option>
+    <option name="CUSTOM_LINE_COMMENT_ATTRIBUTES">
+      <value>
+        <option name="FOREGROUND" value="94727C" />
+        <option name="FONT_TYPE" value="2" />
+      </value>
+    </option>
+    <option name="CUSTOM_MULTI_LINE_COMMENT_ATTRIBUTES">
+      <value>
+        <option name="FOREGROUND" value="94727C" />
+        <option name="FONT_TYPE" value="2" />
+      </value>
+    </option>
+    <option name="CUSTOM_NUMBER_ATTRIBUTES">
+      <value>
+        <option name="FOREGROUND" value="7B3FD1" />
+      </value>
+    </option>
+    <option name="CUSTOM_STRING_ATTRIBUTES">
+      <value>
+        <option name="FOREGROUND" value="1F9466" />
+      </value>
+    </option>
+    <option name="CUSTOM_VALID_STRING_ESCAPE_ATTRIBUTES">
+      <value>
+        <option name="FOREGROUND" value="7B3FD1" />
+      </value>
+    </option>
+    <option name="CUSTOM_INVALID_STRING_ESCAPE_ATTRIBUTES">
+      <value>
+        <option name="FOREGROUND" value="D62F4B" />
+      </value>
+    </option>
+    <option name="INSTANCE_FIELD_ATTRIBUTES" baseAttributes="DEFAULT_INSTANCE_FIELD" />
+    <option name="STATIC_FIELD_ATTRIBUTES" baseAttributes="DEFAULT_STATIC_FIELD" />
+    <option name="STATIC_FINAL_FIELD_ATTRIBUTES" baseAttributes="DEFAULT_CONSTANT" />
+    <option name="STATIC_METHOD_ATTRIBUTES" baseAttributes="DEFAULT_STATIC_METHOD" />
+    <option name="ANNOTATION_NAME_ATTRIBUTES" baseAttributes="DEFAULT_METADATA" />
+    <option name="ANNOTATION_ATTRIBUTE_NAME_ATTRIBUTES" baseAttributes="DEFAULT_PARAMETER" />
+    <option name="IMPLICIT_ANONYMOUS_CLASS_PARAMETER_ATTRIBUTES" baseAttributes="DEFAULT_PARAMETER" />
+    <option name="KOTLIN_LABEL" baseAttributes="DEFAULT_LABEL" />
+    <option name="KOTLIN_MUTABLE_VARIABLE" baseAttributes="DEFAULT_LOCAL_VARIABLE" />
+    <option name="KOTLIN_NAMED_ARGUMENT" baseAttributes="DEFAULT_IDENTIFIER" />
+    <option name="KOTLIN_SMART_CONSTANT" baseAttributes="DEFAULT_CONSTANT" />
+    <option name="KOTLIN_TYPE_PARAMETER" baseAttributes="TYPE_PARAMETER_NAME_ATTRIBUTES" />
+    <option name="IntelliJComposableCallTextAttributes" baseAttributes="DEFAULT_FUNCTION_CALL" />
+    <option name="GROOVY_KEYWORD" baseAttributes="DEFAULT_KEYWORD" />
+    <option name="Groovy method declaration" baseAttributes="DEFAULT_FUNCTION_DECLARATION" />
+    <option name="Instance property reference ID" baseAttributes="DEFAULT_INSTANCE_FIELD" />
+    <option name="Static property reference ID" baseAttributes="DEFAULT_STATIC_FIELD" />
+    <option name="Static method access" baseAttributes="DEFAULT_STATIC_METHOD" />
+    <option name="Class" baseAttributes="DEFAULT_CLASS_REFERENCE" />
+    <option name="Scala Type Alias" baseAttributes="DEFAULT_CLASS_NAME" />
+    <option name="Scala Type parameter" baseAttributes="TYPE_PARAMETER_NAME_ATTRIBUTES" />
+    <option name="JS.GLOBAL_FUNCTION" baseAttributes="DEFAULT_FUNCTION_DECLARATION" />
+    <option name="JS.GLOBAL_VARIABLE" baseAttributes="DEFAULT_GLOBAL_VARIABLE" />
+    <option name="JS.INSTANCE_MEMBER_FUNCTION" baseAttributes="DEFAULT_INSTANCE_METHOD" />
+    <option name="JS.LOCAL_VARIABLE" baseAttributes="DEFAULT_LOCAL_VARIABLE" />
+    <option name="COFFEESCRIPT.GLOBAL_VARIABLE" baseAttributes="DEFAULT_GLOBAL_VARIABLE" />
+    <option name="NG.SIGNAL" baseAttributes="DEFAULT_FUNCTION_CALL" />
+    <option name="PY.BUILTIN_NAME" baseAttributes="DEFAULT_PREDEFINED_SYMBOL" />
+    <option name="PY.KEYWORD_ARGUMENT" baseAttributes="DEFAULT_IDENTIFIER" />
+    <option name="PY.PREDEFINED_DEFINITION" baseAttributes="DEFAULT_FUNCTION_DECLARATION" />
+    <option name="PY.PREDEFINED_USAGE" baseAttributes="DEFAULT_FUNCTION_CALL" />
+    <option name="PY.SELF_PARAMETER" baseAttributes="DEFAULT_PARAMETER" />
+    <option name="PY.STRING.B" baseAttributes="DEFAULT_STRING" />
+    <option name="GO_BUILTIN_CONSTANT" baseAttributes="DEFAULT_CONSTANT" />
+    <option name="GO_BUILTIN_FUNCTION_CALL" baseAttributes="DEFAULT_FUNCTION_CALL" />
+    <option name="GO_BUILTIN_TYPE_REFERENCE" baseAttributes="DEFAULT_CLASS_REFERENCE" />
+    <option name="GO_BUILTIN_VARIABLE" baseAttributes="DEFAULT_GLOBAL_VARIABLE" />
+    <option name="GO_COMMENT_REFERENCE" baseAttributes="DEFAULT_DOC_COMMENT_TAG_VALUE" />
+    <option name="GO_EXPORTED_FUNCTION" baseAttributes="DEFAULT_FUNCTION_DECLARATION" />
+    <option name="GO_EXPORTED_FUNCTION_CALL" baseAttributes="DEFAULT_FUNCTION_CALL" />
+    <option name="GO_LOCAL_CONSTANT" baseAttributes="DEFAULT_CONSTANT" />
+    <option name="GO_LOCAL_FUNCTION" baseAttributes="DEFAULT_FUNCTION_DECLARATION" />
+    <option name="GO_LOCAL_FUNCTION_CALL" baseAttributes="DEFAULT_FUNCTION_CALL" />
+    <option name="GO_METHOD_RECEIVER" baseAttributes="DEFAULT_PARAMETER" />
+    <option name="GO_PACKAGE" baseAttributes="DEFAULT_IDENTIFIER" />
+    <option name="GO_PACKAGE_EXPORTED_CONSTANT" baseAttributes="DEFAULT_CONSTANT" />
+    <option name="GO_PACKAGE_LOCAL_CONSTANT" baseAttributes="DEFAULT_CONSTANT" />
+    <option name="GO_SHADOWING_VARIABLE" baseAttributes="DEFAULT_LOCAL_VARIABLE" />
+    <option name="GO_TYPE_REFERENCE" baseAttributes="DEFAULT_CLASS_REFERENCE" />
+    <option name="HTML_ATTRIBUTE_NAME" baseAttributes="DEFAULT_ATTRIBUTE" />
+    <option name="HTML_ATTRIBUTE_VALUE" baseAttributes="DEFAULT_STRING" />
+    <option name="HTML_TAG_NAME" baseAttributes="DEFAULT_TAG" />
+    <option name="HTML_CUSTOM_TAG_NAME" baseAttributes="DEFAULT_TAG" />
+    <option name="HTML_ENTITY_REFERENCE" baseAttributes="DEFAULT_ENTITY" />
+    <option name="XML_ATTRIBUTE_NAME" baseAttributes="DEFAULT_ATTRIBUTE" />
+    <option name="XML_TAG_NAME" baseAttributes="DEFAULT_TAG" />
+    <option name="XML_CUSTOM_TAG_NAME" baseAttributes="DEFAULT_TAG" />
+    <option name="XML_ENTITY_REFERENCE" baseAttributes="DEFAULT_ENTITY" />
+    <option name="XML_PROLOGUE" baseAttributes="DEFAULT_KEYWORD" />
+    <option name="JSP_DIRECTIVE_NAME" baseAttributes="DEFAULT_KEYWORD" />
+    <option name="HAML_TAG" baseAttributes="DEFAULT_TAG" />
+    <option name="HAML_CLASS" baseAttributes="DEFAULT_ATTRIBUTE" />
+    <option name="HAML_ID" baseAttributes="DEFAULT_ATTRIBUTE" />
+    <option name="HAML_COMMENT" baseAttributes="DEFAULT_LINE_COMMENT" />
+    <option name="CSS.COLOR" baseAttributes="DEFAULT_NUMBER" />
+    <option name="CSS.IMPORTANT" baseAttributes="DEFAULT_KEYWORD" />
+    <option name="CSS.URL" baseAttributes="DEFAULT_STRING" />
+    <option name="LESS_VARIABLE" baseAttributes="DEFAULT_LOCAL_VARIABLE" />
+    <option name="SASS_VARIABLE" baseAttributes="DEFAULT_LOCAL_VARIABLE" />
+    <option name="SASS_ATTRIBUTE" baseAttributes="DEFAULT_INSTANCE_FIELD" />
+    <option name="SASS_COMMENT" baseAttributes="DEFAULT_BLOCK_COMMENT" />
+    <option name="SASS_CONSTANT" baseAttributes="DEFAULT_CONSTANT" />
+    <option name="SASS_DIRECTIVE" baseAttributes="DEFAULT_KEYWORD" />
+    <option name="SASS_RULE" baseAttributes="DEFAULT_KEYWORD" />
+    <option name="SASS_MIXIN" baseAttributes="DEFAULT_FUNCTION_CALL" />
+    <option name="YAML_ANCHOR" baseAttributes="DEFAULT_CONSTANT" />
+    <option name="PROPERTIES.KEY" baseAttributes="DEFAULT_INSTANCE_FIELD" />
+    <option name="PROPERTIES.KEY_VALUE_SEPARATOR" baseAttributes="DEFAULT_OPERATION_SIGN" />
+    <option name="PROPERTIES.VALID_STRING_ESCAPE" baseAttributes="DEFAULT_VALID_STRING_ESCAPE" />
+    <option name="PROPERTIES.INVALID_STRING_ESCAPE" baseAttributes="DEFAULT_INVALID_STRING_ESCAPE" />
+    <option name="REGEXP.BRACES" baseAttributes="JS.REGEXP" />
+    <option name="REGEXP.BRACKETS" baseAttributes="JS.REGEXP" />
+    <option name="REGEXP.PARENTHS" baseAttributes="JS.REGEXP" />
+    <option name="REGEXP.CHAR_CLASS" baseAttributes="JS.REGEXP" />
+    <option name="REGEXP.META" baseAttributes="JS.REGEXP" />
+    <option name="REGEXP.ESC_CHARACTER" baseAttributes="DEFAULT_VALID_STRING_ESCAPE" />
+    <option name="REGEXP.QUOTE_CHARACTER" baseAttributes="DEFAULT_VALID_STRING_ESCAPE" />
+    <option name="REGEXP.REDUNDANT_ESCAPE" baseAttributes="DEFAULT_VALID_STRING_ESCAPE" />
+    <option name="MERMAID_KEYWORD" baseAttributes="DEFAULT_KEYWORD" />
+    <option name="MERMAID_CONSTANT" baseAttributes="DEFAULT_CONSTANT" />
+    <option name="MERMAID_IDENTIFIER" baseAttributes="DEFAULT_IDENTIFIER" />
+    <option name="MERMAID_EDGE" baseAttributes="DEFAULT_OPERATION_SIGN" />
+    <option name="MERMAID_DIAGRAM_NAME" baseAttributes="DEFAULT_KEYWORD" />
+    <option name="MERMAID_TITLE" baseAttributes="DEFAULT_KEYWORD" />
   </attributes>
 </scheme>
