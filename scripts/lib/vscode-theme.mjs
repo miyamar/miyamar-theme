@@ -42,6 +42,14 @@ export function withAlpha(hex, alpha) {
   return "#" + toHex2(c.r) + toHex2(c.g) + toHex2(c.b) + toHex2(alpha * 255);
 }
 
+/** Opaque blend: `t` of `a` and `1 - t` of `b` (alpha ignored). */
+export function mix(a, b, t) {
+  const x = parseHex(a);
+  const y = parseHex(b);
+  const m = (p, q) => p * t + q * (1 - t);
+  return "#" + toHex2(m(x.r, y.r)) + toHex2(m(x.g, y.g)) + toHex2(m(x.b, y.b));
+}
+
 /** Normalize to upper-case #RRGGBB or #RRGGBBAA. */
 export function normalize(hex) {
   const c = parseHex(hex);
@@ -104,25 +112,42 @@ function makeSemantic(semanticTokenColors = {}) {
 /**
  * Syntax roles shared by every port.
  *
- * Which VS Code source a role comes from mirrors what you see editing TypeScript in
- * VS Code: the TypeScript server emits semantic tokens for identifiers (functions,
- * types, parameters, properties...), while keywords, strings, numbers, comments and
- * punctuation fall through to the TextMate rules.
+ * Semantic token colors win wherever they exist: with a language server running
+ * (Dart, Rust, C#, Python...) they color keywords, strings, numbers and comments as
+ * well as identifiers, so they are what VS Code actually paints. TextMate rules fill
+ * in the rest (punctuation, tags, markup) and supply font styles, since VS Code keeps
+ * TextMate italics/bold under a plain-color semantic rule.
  */
 function buildSyntax(tm, sem, foreground) {
   const pick = (...candidates) => candidates.find(Boolean) ?? null;
   const fg = { color: foreground, bold: false, italic: false, underline: false };
+  /** Semantic color with TextMate font style; either side alone if the other is missing. */
+  const both = (semKey, scope) => {
+    const s = sem(semKey);
+    const t = tm(scope);
+    if (!s || !t) return s ?? t;
+    return {
+      color: s.color,
+      bold: s.bold || t.bold,
+      italic: s.italic || t.italic,
+      underline: s.underline || t.underline,
+    };
+  };
   return {
-    comment: tm("comment"),
-    keyword: tm("keyword.control"),
-    storage: pick(tm("storage.type"), tm("keyword.control")),
-    operator: tm("keyword.operator"),
+    comment: both("comment", "comment"),
+    keyword: both("keyword", "keyword.control"),
+    storage: both("keyword", "storage.type"),
+    operator: both("operator", "keyword.operator"),
     punctuation: tm("punctuation"),
-    string: tm("string"),
-    stringEscape: pick(tm("constant.character.escape"), tm("string")),
-    regexp: pick(sem("regexp"), tm("string.regexp"), tm("string")),
-    number: tm("constant.numeric"),
-    boolean: pick(tm("constant.language"), tm("constant.numeric")),
+    // Brackets are unscoped in most grammars (Dart included), so VS Code shows them
+    // in the plain editor foreground.
+    bracket: fg,
+    string: both("string", "string"),
+    stringEscape: pick(tm("constant.character.escape"), both("string", "string")),
+    regexp: pick(sem("regexp"), tm("string.regexp"), both("string", "string")),
+    number: both("number", "constant.numeric"),
+    // Language servers report true/false/null as keywords.
+    boolean: both("keyword", "constant.language"),
     constant: pick(sem("variable.readonly"), tm("support.constant"), tm("constant.language")),
     function: pick(sem("function"), tm("entity.name.function")),
     method: pick(sem("method"), sem("function"), tm("entity.name.function")),
@@ -142,6 +167,7 @@ function buildSyntax(tm, sem, foreground) {
     builtin: pick(tm("support.constant"), tm("support.variable")),
     tag: tm("entity.name.tag"),
     attribute: tm("entity.other.attribute-name"),
+    jsonKey: pick(tm("support.type.property-name"), sem("property")),
     invalid: tm("invalid"),
     heading: tm("markup.heading"),
     bold: tm("markup.bold"),
