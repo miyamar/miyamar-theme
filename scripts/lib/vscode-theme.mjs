@@ -99,80 +99,61 @@ function makeTextMate(tokenColors) {
   };
 }
 
-function makeSemantic(semanticTokenColors = {}) {
-  return (key) => {
-    const v = semanticTokenColors[key];
-    if (!v) return null;
-    if (typeof v === "string") return { color: normalize(v), bold: false, italic: false, underline: false };
-    if (!v.foreground) return null;
-    return { color: normalize(v.foreground), bold: !!v.bold, italic: !!v.italic, underline: !!v.underline };
-  };
-}
-
 /**
- * Syntax roles shared by every port.
+ * Syntax roles shared by every port, taken from the theme's TextMate `tokenColors`.
  *
- * Semantic token colors win wherever they exist: with a language server running
- * (Dart, Rust, C#, Python...) they color keywords, strings, numbers and comments as
- * well as identifiers, so they are what VS Code actually paints. TextMate rules fill
- * in the rest (punctuation, tags, markup) and supply font styles, since VS Code keeps
- * TextMate italics/bold under a plain-color semantic rule.
+ * Each role resolves the TextMate scopes VS Code itself falls back to for that kind
+ * of token (its semantic-token-to-TextMate mapping), with the same longest-prefix
+ * matching, so a role gets exactly the color VS Code would give it. Roles no rule
+ * matches use the plain editor foreground, as in VS Code.
  */
-function buildSyntax(tm, sem, foreground) {
-  const pick = (...candidates) => candidates.find(Boolean) ?? null;
+function buildSyntax(tm, foreground) {
   const fg = { color: foreground, bold: false, italic: false, underline: false };
-  /** Semantic color with TextMate font style; either side alone if the other is missing. */
-  const both = (semKey, scope) => {
-    const s = sem(semKey);
-    const t = tm(scope);
-    if (!s || !t) return s ?? t;
-    return {
-      color: s.color,
-      bold: s.bold || t.bold,
-      italic: s.italic || t.italic,
-      underline: s.underline || t.underline,
-    };
+  /** First scope that some rule matches, else the editor foreground. */
+  const scope = (...scopes) => {
+    for (const s of scopes) {
+      const r = tm(s);
+      if (r) return r;
+    }
+    return fg;
   };
   return {
-    comment: both("comment", "comment"),
-    keyword: both("keyword", "keyword.control"),
-    storage: both("keyword", "storage.type"),
-    operator: both("operator", "keyword.operator"),
-    punctuation: tm("punctuation"),
-    // Brackets are unscoped in most grammars (Dart included), so VS Code shows them
-    // in the plain editor foreground.
-    bracket: fg,
-    string: both("string", "string"),
-    stringEscape: pick(tm("constant.character.escape"), both("string", "string")),
-    regexp: pick(sem("regexp"), tm("string.regexp"), both("string", "string")),
-    number: both("number", "constant.numeric"),
-    // Language servers report true/false/null as keywords.
-    boolean: both("keyword", "constant.language"),
-    constant: pick(sem("variable.readonly"), tm("support.constant"), tm("constant.language")),
-    function: pick(sem("function"), tm("entity.name.function")),
-    method: pick(sem("method"), sem("function"), tm("entity.name.function")),
-    type: pick(sem("type"), tm("entity.name.type")),
-    class: pick(sem("class"), sem("type"), tm("entity.name.class")),
-    interface: pick(sem("interface"), sem("type"), tm("entity.name.type")),
-    enum: pick(sem("enum"), sem("type"), tm("entity.name.type")),
-    struct: pick(sem("struct"), sem("class"), tm("entity.name.type")),
-    typeParameter: pick(sem("typeParameter"), sem("type"), tm("entity.name.type")),
-    namespace: pick(sem("namespace"), sem("type"), tm("entity.name.type")),
-    parameter: pick(sem("parameter"), tm("variable.parameter")),
-    variable: pick(sem("variable"), tm("variable"), fg),
-    property: pick(sem("property"), sem("variable"), tm("variable")),
-    enumMember: pick(sem("enumMember"), tm("constant.numeric")),
-    decorator: pick(sem("decorator"), tm("entity.name.function")),
-    macro: pick(sem("macro"), tm("entity.name.function")),
-    builtin: pick(tm("support.constant"), tm("support.variable")),
-    tag: tm("entity.name.tag"),
-    attribute: tm("entity.other.attribute-name"),
-    jsonKey: pick(tm("support.type.property-name"), sem("property")),
-    invalid: tm("invalid"),
-    heading: tm("markup.heading"),
-    bold: tm("markup.bold"),
-    italic: tm("markup.italic"),
-    raw: tm("markup.inline.raw"),
+    comment: scope("comment"),
+    keyword: scope("keyword.control"),
+    storage: scope("storage.type"),
+    operator: scope("keyword.operator"),
+    punctuation: scope("punctuation"),
+    bracket: scope("punctuation.definition.block"),
+    string: scope("string"),
+    stringEscape: scope("constant.character.escape"),
+    regexp: scope("string.regexp"),
+    number: scope("constant.numeric"),
+    boolean: scope("constant.language"),
+    constant: scope("variable.other.constant"),
+    function: scope("entity.name.function"),
+    method: scope("entity.name.function.member"),
+    type: scope("entity.name.type"),
+    class: scope("entity.name.type.class", "entity.name.class"),
+    interface: scope("entity.name.type.interface"),
+    enum: scope("entity.name.type.enum"),
+    struct: scope("entity.name.type.struct"),
+    typeParameter: scope("entity.name.type.parameter"),
+    namespace: scope("entity.name.namespace"),
+    parameter: scope("variable.parameter"),
+    variable: scope("variable.other.readwrite"),
+    property: scope("variable.other.property"),
+    enumMember: scope("variable.other.enummember"),
+    decorator: scope("entity.name.decorator", "entity.name.function"),
+    macro: scope("entity.name.function.preprocessor"),
+    builtin: scope("support.constant"),
+    tag: scope("entity.name.tag"),
+    attribute: scope("entity.other.attribute-name"),
+    jsonKey: scope("support.type.property-name"),
+    invalid: scope("invalid"),
+    heading: scope("markup.heading"),
+    bold: scope("markup.bold"),
+    italic: scope("markup.italic"),
+    raw: scope("markup.inline.raw"),
     link: tm("markup.underline.link"),
   };
 }
@@ -196,7 +177,6 @@ export function loadThemes() {
     };
 
     const tm = makeTextMate(vs.tokenColors ?? []);
-    const sem = makeSemantic(vs.semanticTokenColors);
 
     return {
       id: slugFromPath(entry.path),
@@ -204,7 +184,7 @@ export function loadThemes() {
       dark: entry.uiTheme !== "vs" && entry.type !== "light",
       color,
       solid,
-      syntax: buildSyntax(tm, sem, color("editor.foreground", "foreground")),
+      syntax: buildSyntax(tm, color("editor.foreground", "foreground")),
     };
   });
 }
