@@ -22,11 +22,21 @@ jobs:
           java-version: 21
 
       - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '9.9.0'
 
-      # build.gradle.kts should read the token via
-      # intellijPlatform { publishing { token = providers.environmentVariable("PUBLISH_TOKEN") } }
+      - name: Check tag matches gradle.properties version
+        run: |
+          TAG_VERSION="${GITHUB_REF_NAME#jetbrains-v}"
+          PROP_VERSION="$(sed -n 's/^pluginVersion *= *//p' gradle.properties)"
+          if [ "$TAG_VERSION" != "$PROP_VERSION" ]; then
+            echo "::error::Tag $GITHUB_REF_NAME does not match gradle.properties pluginVersion $PROP_VERSION"
+            exit 1
+          fi
+
+      # build.gradle.kts reads the token from PUBLISH_TOKEN.
       - name: Publish to JetBrains Marketplace
-        run: ./gradlew publishPlugin
+        run: gradle publishPlugin
         env:
           PUBLISH_TOKEN: ${{ secrets.JETBRAINS_MARKETPLACE_TOKEN }}
 

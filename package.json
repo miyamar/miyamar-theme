@@ -11,8 +11,9 @@
     "vscode": "^1.85.0"
   },
   "scripts": {
-    "build": "npm run build:zed",
-    "build:zed": "node scripts/build-zed.mjs"
+    "build": "npm run build:zed && npm run build:jetbrains",
+    "build:zed": "node scripts/build-zed.mjs",
+    "build:jetbrains": "node scripts/build-jetbrains.mjs"
   },
   "categories": [
     "Themes"
