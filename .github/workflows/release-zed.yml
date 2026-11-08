@@ -1,0 +1,69 @@
+name: Release Zed
+
+on:
+  push:
+    tags: ['zed-v*']
+
+# Opens a PR on zed-industries/extensions that points the miyamar-theme submodule at
+# this tag's commit and bumps its version. The very first submission (adding the
+# submodule and the [miyamar-theme] entry with path = "zed") has to be made by hand.
+#
+# ZED_COMMITTER_TOKEN: a classic PAT with "repo" and "workflow" scopes, belonging to
+# the account that owns (or will own) the fork of zed-industries/extensions.
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check tag matches extension.toml version
+        id: version
+        run: |
+          TAG_VERSION="${GITHUB_REF_NAME#zed-v}"
+          TOML_VERSION="$(sed -n 's/^version = "\(.*\)"/\1/p' zed/extension.toml)"
+          if [ "$TAG_VERSION" != "$TOML_VERSION" ]; then
+            echo "::error::Tag $GITHUB_REF_NAME does not match zed/extension.toml version $TOML_VERSION"
+            exit 1
+          fi
+          echo "version=$TOML_VERSION" >> "$GITHUB_OUTPUT"
+
+      - name: Open PR on zed-industries/extensions
+        env:
+          GH_TOKEN: ${{ secrets.ZED_COMMITTER_TOKEN }}
+          VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          set -euo pipefail
+          LOGIN="$(gh api user --jq .login)"
+          BRANCH="miyamar-theme-v$VERSION"
+
+          gh repo fork zed-industries/extensions --clone=false || true
+          gh repo sync "$LOGIN/extensions" --source zed-industries/extensions --branch main
+
+          git clone --depth 1 "https://x-access-token:$GH_TOKEN@github.com/$LOGIN/extensions.git" ext
+          cd ext
+          git config user.name "$LOGIN"
+          git config user.email "$LOGIN@users.noreply.github.com"
+          git checkout -b "$BRANCH"
+
+          git submodule update --init extensions/miyamar-theme
+          git -C extensions/miyamar-theme fetch origin "$GITHUB_SHA"
+          git -C extensions/miyamar-theme checkout "$GITHUB_SHA"
+
+          python3 - <<'PY'
+          import os, re
+          path = "extensions.toml"
+          text = open(path).read()
+          section = re.search(r"(?ms)^\[miyamar-theme\]\n.*?(?=^\[|\Z)", text)
+          if not section:
+              raise SystemExit("[miyamar-theme] not found in extensions.toml; submit it by hand first")
+          block = re.sub(r'(?m)^version = ".*"$', f'version = "{os.environ["VERSION"]}"', section.group(0))
+          open(path, "w").write(text[:section.start()] + block + text[section.end():])
+          PY
+
+          git add extensions.toml extensions/miyamar-theme
+          git commit -m "Update miyamar-theme to v$VERSION"
+          git push origin "$BRANCH"
+          gh pr create --repo zed-industries/extensions --head "$LOGIN:$BRANCH" \
+            --title "Update miyamar-theme to v$VERSION" \
+            --body "Updates the Miyamar theme extension to v$VERSION."

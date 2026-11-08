@@ -10,6 +10,11 @@
   "engines": {
     "vscode": "^1.85.0"
   },
+  "scripts": {
+    "build": "npm run build:zed && npm run build:jetbrains",
+    "build:zed": "node scripts/build-zed.mjs",
+    "build:jetbrains": "node scripts/build-jetbrains.mjs"
+  },
   "categories": [
     "Themes"
   ],
@@ -31,19 +36,19 @@
         "label": "Miyamar Pink (Baby Girl Wished)",
         "type": "light",
         "uiTheme": "vs",
-        "path": "./themes/pink-milky-theme.json" 
+        "path": "./themes/pink-milky-theme.json"
       },
       {
         "label": "Miyamar Burgundy (Dark)",
         "type": "dark",
         "uiTheme": "vs-dark",
-        "path": "./themes/burgundy-dark-theme.json" 
+        "path": "./themes/burgundy-dark-theme.json"
       },
       {
         "label": "Miyamar Burgundy (Light)",
         "type": "light",
         "uiTheme": "vs",
-        "path": "./themes/burgundy-light-theme.json" 
+        "path": "./themes/burgundy-light-theme.json"
       }
     ]
   }

@@ -1,0 +1,24 @@
+<idea-plugin>
+  <id>com.miyamar.theme</id>
+  <name>Miyamar Theme</name>
+  <vendor url="https://github.com/miyamar">Miyamar</vendor>
+
+  <description><![CDATA[
+    <p>A minimal well-focused theme crafted for deep work, clear code, and effortless flow,
+    designed to make long coding sessions feel productive and more enjoyable.</p>
+    <p>Includes five variants: Dark, Light, Pink, Burgundy Dark and Burgundy Light,
+    each with a matching editor color scheme.</p>
+  ]]></description>
+
+  <depends>com.intellij.modules.platform</depends>
+
+  <extensions defaultExtensionNs="com.intellij">
+    <!-- generated:themes -->
+    <themeProvider id="com.miyamar.theme.miyamar-dark" path="/themes/miyamar-dark.theme.json" />
+    <themeProvider id="com.miyamar.theme.miyamar-light" path="/themes/miyamar-light.theme.json" />
+    <themeProvider id="com.miyamar.theme.miyamar-milky-pink" path="/themes/miyamar-milky-pink.theme.json" />
+    <themeProvider id="com.miyamar.theme.miyamar-burgundy-dark" path="/themes/miyamar-burgundy-dark.theme.json" />
+    <themeProvider id="com.miyamar.theme.miyamar-burgundy-light" path="/themes/miyamar-burgundy-light.theme.json" />
+    <!-- /generated:themes -->
+  </extensions>
+</idea-plugin>
