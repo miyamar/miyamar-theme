@@ -1,0 +1,68 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  vscode:
+    name: VS Code theme
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Validate theme JSON and package.json references
+        run: |
+          node -e '
+            const fs = require("fs");
+            const pkg = require("./package.json");
+            let failed = false;
+            for (const t of pkg.contributes.themes) {
+              try {
+                JSON.parse(fs.readFileSync(t.path, "utf8"));
+                console.log("ok   " + t.path);
+              } catch (e) {
+                console.error("FAIL " + t.path + ": " + e.message);
+                failed = true;
+              }
+            }
+            process.exit(failed ? 1 : 0);
+          '
+
+      - name: Package extension
+        run: npx --yes @vscode/vsce package --out miyamar-theme.vsix
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: vscode-vsix
+          path: miyamar-theme.vsix
+
+  jetbrains:
+    name: JetBrains plugin
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check for JetBrains project
+        id: check
+        run: |
+          if [ -f jetbrains/build.gradle.kts ]; then echo "exists=true" >> "$GITHUB_OUTPUT"; else echo "No jetbrains/ project yet, skipping"; fi
+
+      - uses: actions/setup-java@v4
+        if: steps.check.outputs.exists == 'true'
+        with:
+          distribution: temurin
+          java-version: 21
+
+      - uses: gradle/actions/setup-gradle@v4
+        if: steps.check.outputs.exists == 'true'
+
+      - name: Build and verify plugin
+        if: steps.check.outputs.exists == 'true'
+        working-directory: jetbrains
+        run: ./gradlew buildPlugin verifyPlugin

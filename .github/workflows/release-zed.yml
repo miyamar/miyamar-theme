@@ -1,0 +1,19 @@
+name: Release Zed
+
+on:
+  push:
+    tags: ['zed-v*']
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      # Opens a PR on zed-industries/extensions bumping the miyamar-theme submodule.
+      # The very first submission (adding the entry to extensions.toml with path = "zed")
+      # has to be made by hand.
+      - uses: huacnlee/zed-extension-action@v1
+        with:
+          extension-name: miyamar-theme
+          push-to: ${{ github.repository_owner }}/extensions
+        env:
+          COMMITTER_TOKEN: ${{ secrets.ZED_COMMITTER_TOKEN }}

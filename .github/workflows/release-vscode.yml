@@ -1,0 +1,46 @@
+name: Release VS Code
+
+on:
+  push:
+    tags: ['vscode-v*']
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    env:
+      OVSX_PAT: ${{ secrets.OVSX_PAT }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Check tag matches package.json version
+        run: |
+          TAG_VERSION="${GITHUB_REF_NAME#vscode-v}"
+          PKG_VERSION="$(node -p 'require("./package.json").version')"
+          if [ "$TAG_VERSION" != "$PKG_VERSION" ]; then
+            echo "::error::Tag $GITHUB_REF_NAME does not match package.json version $PKG_VERSION"
+            exit 1
+          fi
+
+      - name: Package extension
+        run: npx --yes @vscode/vsce package --out miyamar-theme-${GITHUB_REF_NAME#vscode-v}.vsix
+
+      - name: Publish to VS Code Marketplace
+        run: npx --yes @vscode/vsce publish --packagePath miyamar-theme-*.vsix
+        env:
+          VSCE_PAT: ${{ secrets.VSCE_PAT }}
+
+      - name: Publish to Open VSX
+        if: ${{ env.OVSX_PAT != '' }}
+        run: npx --yes ovsx publish miyamar-theme-*.vsix
+
+      - name: Create GitHub release
+        run: gh release create "$GITHUB_REF_NAME" miyamar-theme-*.vsix --title "VS Code ${GITHUB_REF_NAME#vscode-v}" --generate-notes
+        env:
+          GH_TOKEN: ${{ github.token }}
